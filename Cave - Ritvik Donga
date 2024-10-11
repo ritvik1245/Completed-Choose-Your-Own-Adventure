@@ -11,7 +11,7 @@ a mysterious dungeon. You will be able to explore the dungeon, fight enemies and
 def time_text(text): # slows the speed at which the text outputs to make it easier to read.
     for char in text:
         print(char,end='',flush=True)
-        time.sleep(0.0)
+        time.sleep(0.1)
 
 time_text("You are returning home after a long day when you spot something unusual. In the woods you pass by every day, you see something that looks like an opening to a cave jutting out of the ground. It's eerie, you swear you've never seen this before but it's almost as if you need to investigate, almost as if something is calling you inside.")
 while True: # Infinate loop to check if player input is a valid input.
