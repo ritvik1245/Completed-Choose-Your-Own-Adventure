@@ -3,7 +3,7 @@ import random # Allows for the use of randrange() function to generate a random 
 import time 
 
 """
-Ritvik Donga - Cave - Due October 9, 2024
+Ritvik Donga - Cavern Quest - Due October 9, 2024
 
 This is a 'choose your own adventure' text-based game. In this game you will play as the protagonist who stumbles upon
 a mysterious dungeon. You will be able to explore the dungeon, fight enemies and uncover hidden secrets! 
