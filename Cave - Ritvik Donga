@@ -1,0 +1,457 @@
+import sys # Allows for the use of the sys.exit() function to stop the program as soon as the player's health hits 0. 
+import random # Allows for the use of randrange() function to generate a random number in a given range.
+import time 
+
+"""
+Ritvik Donga - Cave - Due October 9, 2024
+
+This is a 'choose your own adventure' text-based game. In this game you will play as the protagonist who stumbles upon
+a mysterious dungeon. You will be able to explore the dungeon, fight enemies and uncover hidden secrets! 
+"""
+def time_text(text): # slows the speed at which the text outputs to make it easier to read.
+    for char in text:
+        print(char,end='',flush=True)
+        time.sleep(0.0)
+
+time_text("You are returning home after a long day when you spot something unusual. In the woods you pass by every day, you see something that looks like an opening to a cave jutting out of the ground. It's eerie, you swear you've never seen this before but it's almost as if you need to investigate, almost as if something is calling you inside.")
+while True: # Infinate loop to check if player input is a valid input.
+    choice_1 = input("You have to make a decision, do you go and investigate this mysterious cave? Or do you ignore it and go on with your day as usual? ('enter'/'leave') ")
+    if choice_1 == "enter" or choice_1 == "leave":
+        break # if input is valid, exits loop and continues program.
+    else:
+        time_text("Invalid choice") # if input is invalid, prompts user to give a new input. 
+if choice_1 == "enter": # This option begins the game.
+    time_text("You enter the cave, walk down the steps that take you underground. At the bottom of the staircase is a large rectangular room with walls made of bricks and lined with torches. The room is empty aside from a sword laying on the ground that you pick up just in case. ")
+if choice_1 == "leave": # This option is just for fun and lets you 'skip' the game entirely. 
+    time_text("You decide it's not worth your time. It's too creepy anyway. You continue your walk home and, soon enough, you forget about this incident, never to see the mysterious cave again. ")
+    sys.exit()
+
+def health_check(): 
+    if health <= 0: # Function to perform a health check after every instance of health loss. If health equals 0, game ends. 
+            time_text("As your health drops to zero you feel your consciousness slowly fading away. Game Over!")
+            sys.exit()
+# All of the various counters will be displayed here:
+health = int(100) # health counter. If the counter hits 0, game ends instantly.
+max_health = 100
+story_page = int(0) # Story page counter. When all pages are collected unlocks a secret.
+red_gem = int(0) # red gem is a key item that allows the player to unlock a new weapon later on. 
+pumpkin_tart = int(0) # Key item required to unlock a specific ending. 
+coins = int(0) # Currency to buy items in the shop
+
+# First room choice 
+while True:
+    choice_2 = input("In front of you, you see two doors. On the left door there seems to be an intimidating depiction of a skull and crossbones. On the right you see a more inviting drawing of a book. Which do you choose? ('left'/'right') ")
+    if choice_2 == "left" or choice_2 == "right":
+        break 
+    else:
+        time_text("Invalid choice") 
+
+# Lines 49 - 67, first combat room
+if choice_2 == "left": # skull and crossbones indicate a combat room. 
+    time_text("\nYou walk up to the left door and push it with all your might. As the dust settles, you catch your first glimpse at this new room, except, you cant see anything... Suddenly, torches lining the walls illuminate and you spot two skeletons! It's time for your first fight! ")
+    while True:
+        fight_1 = input("\nYou scan your enemies and develop a strategy. You notice that one of the skeletons is standing further back with some sort of scepter, it might be able to hit you with magic if you leave it alone. The other is a simple fighter skeleton, it wields a sword and won't be able to hit you if you are too far form it. Will you run ahead and fight the mage first or will you take on the fighter first? ('mage'/'fighter') ")
+        if fight_1 == "mage" or fight_1 == "fighter":
+            break 
+        else:
+            time_text("Invalid choice") 
+    # Strategy element that allows you to decide how the battle plays out. The outcome will change accordingly: 
+    if fight_1 == "mage": # "good ending" > exit without losing health
+        time_text("You run around the first skeleton and swiftly eliminate the mage, then, you turn around and take out the other skeleton. The brittle skeletons fall with single hit of your sword. You got through your first battle unscathed!")
+    if fight_1 == "fighter": # "bad ending" > damage taken 
+        health -= int(random.randint(25,27)) # most damage is randomized within a small range to make every playthrough diffrent.
+        time_text("You quickly eliminate the fighter skeleton however, while you were distracted the mage hits you with a magic spell! Your health reduces to {}. ".format(health))
+        health_check()
+        time_text("You finish off the mage but you didn't get through this battle unscathed. ")
+    coins += 50
+    time_text("You pick up {} coins off the floor! ".format(coins))
+    
+    # combat/shop choice
+    while True:
+        choice_6 = input("Your next choice is between another combat room and a new room that looks like some kind of shop. ('combat'/'shop')")
+        if choice_6 == "combat" or choice_6 == "shop":
+            break
+        else:
+            time_text("Invalid choice")
+   
+    # Lines 78 - 100, second combat room
+    if choice_6 == "combat":
+        fight_3 = input("You choose the combat room, ready for another fight, this time you encounter two mages. The one on the left wields a bigger staff. Which do you attack? ('left'/'right') ")
+        if fight_3 == "left":
+            health -= int(random.randint(15,21))
+            time_text(" \nYou quickly eliminate the stronger mage and then take out the other.")
+            time_text(" You get hit by the weaker mage in the process and your health drops to {}".format(health))
+            health_check()
+        if fight_3 == "right":
+            health -= int(random.randint(29,37))
+            time_text(" \nYou quickly eliminate the weaker mage and then take out the other.")
+            time_text(" You got hit by the strong mage in the process and your health drops to {}".format(health))
+            health_check()
+        time_text(" \nThere are no new doors this time, going back is the only option. Please choose 'go back' DO NOT INPUT ANYTHING ELSE.")
+        while True:
+            choice_7 = input(" Input 'go back': ")
+            if choice_7 == "ANYTHING ELSE":
+                break
+            else:
+                time_text("INPUT ERROR. PLEASE PROVIDE VALID INPUT")
+        if choice_7 == "ANYTHING ELSE":
+            time_text("\nBefore you can leave you hear rumbling coming from the opposite wall of the room. When you go to investigate you see a staircase has opened up")
+            time_text("You walk all the way up and realize you are back in the woods near your house. You escaped!")
+            time_text("\nEND")
+    
+    # Lines 103 - 124, Shop
+    if choice_6 == "shop":
+        time_text("\nYou enter the shop and you are offered two items, a healing potion and a pumpkin tart. You can only buy one.")
+        while True:
+            choice_8 = input(" ('heal'/'tart')")
+            if choice_8 == "heal" or choice_8 == "tart":
+                break
+            else:
+                time_text(" Invalid choice.")
+        
+        if choice_8 == "heal":
+            coins -= 50
+            health += 50
+            if health > 100:
+                health = max_health
+            time_text(" \nYou now have {} coins.".format(coins))
+            time_text(" Your health increases to {}!".format(health))
+        
+        if choice_8 == "tart":
+            coins -= 50
+            pumpkin_tart += 1
+            time_text(" \nYou now have {} coins.".format(coins))
+            time_text(" You bought {} pumpkin tart!".format(pumpkin_tart))
+        
+        # Combat/Mystery choice
+        time_text(" \nAfter finishing up in the shop you see that your next room options are another combat room or a new room labeled with a question mark.")
+        while True:
+            choice_9 = input(" ('combat'/'mystery')")
+            if choice_9 == "combat" or choice_9 == "mystery":
+                break
+            else:
+                time_text(" Invalid choice.")
+        
+        # Lines 136 - 157, Third combat room
+        if choice_9 == "combat":
+            time_text("\nYou enter a room with a sword skeleton and a large goblin. The goblin looks slow but strong")
+            while True:
+                choice_11 = input(" Who do you attack? ('skeleton'/'goblin')")
+                if choice_11 == "skeleton" or choice_11 == "goblin":
+                    break
+                else:
+                    time_text(" Invalid choice.")
+
+            if choice_11 == "skeleton":
+                health -= int(random.randint(27, 34))
+                time_text(" \nYou quickly take out the skeleton but this gives the goblin time to take a swing at you!")
+                time_text(" You are hit hard by the goblin but you get back up and quickly take it out.")
+                time_text(" Your health drops to {}. ".format(health)) 
+                health_check()
+            
+            if choice_11 == "goblin":
+                health -= int(random.randint(8, 16))
+                time_text(" \nYou use your speed to take out the goblin first.")
+                time_text(" The skeleton sneaks up behind you but it does not do much damage.")
+                time_text(" Your health drops to {}. ".format(health))
+                health_check() 
+        
+        # Lines 160 - 196, Mystery room 
+        if choice_9 == "mystery":
+            time_text(" \nCurious, you choose the mystery door, this room you encounter a stone statue with a book blocking your exit")
+            time_text(' "I will allow you to pass if you can correctly answer three questions"')
+            time_text("\nThe first question you are given is '4 x (3+5) - 2' ")
+            while True:
+                choice_11 = input("What is your answer ")
+                if choice_11 == "30":
+                    break
+                else:
+                    time_text("\nThe statue yells: 'WRONG'")
+                    health -= 10
+                    time_text("\nThe statue slams its book into you. Your health drops to {} ".format(health))
+                    health_check()
+            
+            time_text("\nCorrect! Next, water boils at 100 degrees celsius and freezes at -100. 'true' or 'false'? ")
+            while True:
+                choice_11 = input("What is your answer ")
+                if choice_11 == "false":
+                    break
+                else:
+                    time_text("\nThe statue yells: 'WRONG'")
+                    health -= 10
+                    time_text("\nThe statue slams its book into you. Your health drops to {} ".format(health))
+                    health_check()
+            
+            time_text("\nCorrect! Next, Which element has the symbol 'Au'? (no capital letters in answer)")
+            while True: 
+                choice_11 = input("What is your answer ")
+                if choice_11 == "gold":
+                    break
+                else:
+                    time_text("\nThe statue yells: 'WRONG'")
+                    health -= 10
+                    time_text("\nThe statue slams its book into you. Your health drops to {} ".format(health))
+                    health_check()
+            
+            time_text("Congratulations! You answered all of my questions correctly! You may now pass.")
+        
+        # Lines 199 - 203, Healing room 
+        time_text("\nYou enter the next room and luckily its a healing room ")
+        health += 50
+        if health > 100:
+            health = max_health
+        time_text("You drink the healing potion. Your health is now {}".format(health))
+
+        # Lines 206 - 269, Boss room 
+        if pumpkin_tart == 0: # Different ending depending on wether you bought the pumpkin tart item 
+            time_text("\nThe next room is huge, in the back, there is a throne with a massive goblin sitting upon it. ")
+            time_text("The goblin is asleep, do you attack while it is unaware?")
+            while True:
+                choice_12 = input("('attack'/'wait')")
+                if choice_12 == "attack" or choice_12 == "wait":
+                    break
+                else:
+                    time_text("Invalid choice")
+            if choice_12 == "attack":
+                time_text("\nYou walk forward and try to attack the goblin but it wakes up and grabs you!")
+                health -= int(random.randint(56, 65))
+                health_check()        
+                time_text("\nYour health drops to {} as you are thrown across the room!".format(health))
+            if choice_12 == "wait":
+                time_text("\nYou decide to wait and it pays off as the goblin begins to wake up")
+
+            health -= int(random.randint(29,36))
+            time_text("\nYou fight he goblin head on. you take a couple hits, your health reduces to {}".fromat(health))
+            health_check()
+            time_text(" but you beat the goblin in the end!")
+            time_text("\nYou grab the keys around the goblin's neck and notice there are two doors, one leads out of the dungeon, do you want to risk you chance to check out the other door?")
+            while True:
+                choice_13 = input("('other door'/'exit')")
+                if choice_13 == "other door" or choice_13 == "exit":
+                    break
+                else:
+                    time_text("Invalid choice")
+            
+            if choice_13 == "other door":
+                time_text("\nYou go down the other door to find a man in a prison.")
+                time_text("He explains that he is was the king before he was overthrown by the goblins and thanks you for freeing him.")
+                time_text("\n The king gives you gold as a reward and you exit the dungeon. You escaped!")
+                time_text("\nEND")
+                sys.exit()
+            
+            if choice_13 == "exit":
+                time_text("\nYou decide to take the chance while you have it and escape the dungeon!")
+                time_text("\nEND")
+                sys.exit()
+
+        if pumpkin_tart == 1:
+            time_text("\nThe next room is huge, in the back, there is a throne with a massive goblin sitting upon it. ")
+            time_text("The goblin is asleep, do you attack while it is unaware?")
+            while True:
+                choice_12 = input("('attack'/'wait')")
+                if choice_12 == "attack" or choice_12 == "wait":
+                    break
+                else:
+                    time_text("Invalid choice")
+            if choice_12 == "attack":
+                time_text("\nYou walk forward and try to attack the goblin but it wakes up and grabs you!")
+                health -= int(random.randint(56, 65))
+                health_check()        
+                time_text("\nYour health drops to {} as you are thrown across the room!".format(health))
+            if choice_12 == "wait":
+                time_text("\nYou decide to wait and it pays off as the goblin begins to wake up")
+                time_text(" However, it instantly charges and grabs you! ")
+
+            time_text("\nFor some reason the goblin is not hostile, instead it reaches into your bag and pulls out the pumpkin tart")
+            time_text("\nThe goblin eats the tart and looks happy!")
+            time_text("It lets you leave the dungeon as long as you bring it more pumpkin tarts. You escaped!")
+            time_text("\nEND")
+            sys.exit()
+
+# Lines 272 - 311, Maze room 
+if choice_2 == "right":  
+    time_text("You choose the right door, wondering what the symbol could mean. When you enter, you are immediately face to face with a dusty bookshelf. You look left and right but all you see are more bookshelves.")
+    
+    while True:
+        choice_3 = input("\nYou realize what this is, it's a maze! Here's your first decision, do you start by going left or right first? ('left'/'right') ")
+        if choice_3 == "left" or choice_3 == "right":
+            break
+        else:
+            time_text("Invalid choice")
+
+    if choice_3 == "left":
+        time_text("\nNice job! It seems you chose the right path. You walk through the endless bookshelves and quickly encounter the next crossroads.")
+    else:  
+        time_text("\nYou turn right and walk to the end of the bookshelves where you turn right once more. However, as soon as you turn, you realize this path was a dead end, so you return to the entrance and go left this time. It is not long before you reach the next crossroad.")
+
+    while True:    
+        choice_4a = input("\nThis time, you are presented with three paths. Down the left path, you see a dead end but, there is something glistening at the end of the path. You can't see anything down the straight path but you can tell there is a turn at the end of it. The right path is pitch black, venture with caution. You should go and check the left path first ('left') ")
+        if choice_4a == "left":
+            break 
+        else:
+            time_text("Invalid choice")
+
+    if choice_4a == "left":
+        health -= int(random.randint(5, 9))
+        red_gem += 1
+        time_text(" \nYou walk down the path and pick up {} red gem!".format(red_gem))
+        time_text(" While you were distracted looking at it, you walk through a tripwire and straight into a trap! Your health drops to {}. ".format(health))
+        health_check()
+    
+        while True:    
+            choice_4b = input("You return to the starting point. Do you go straight or right now? ('straight'/'right') ")
+            if choice_4b in ["straight", "right"]:
+                break 
+            else:
+                time_text("Invalid choice")
+
+        # Lines 309 - 379, Boss 2 Room
+        if choice_4b == "straight":
+            time_text(" \nYou choose to go forward and see a bright light ahead, you found the exit!")
+            time_text(" Before walking out, you notice a dusty book on the floor. You quickly put it into your bag and continue forward.") 
+            story_page += 1
+
+            time_text("\nThe next room you enter is almost pitch black, the only light is from the purple torched lining the walls.")
+            time_text(" Standing in the room is a massive horned ogre. It looks surprised to see you.")
+            health -= int(random.randint(8,14))
+            time_text("\nYou are immediately slammed to the ground. Your health drops to {}. Somehow, this feels strangely familiar... ".format(health))
+            health_check()
+ 
+            while True:    
+                fight_4 = input("\nYou jump to your feet, the creature is awaiting your next move. You notice the creature has horns where it's eyes should be. Do you run head on or do you sneak behind it? ('run'/'sneak') ")
+                if fight_4 == "run" or fight_4 == "sneak":
+                    break
+                else:
+                    time_text("invalid choice")
+            if fight_4 == "run":
+                health -= int(random.randint(20,25))
+                time_text("\nYou charge forward swinging your sword wildly.")
+                time_text(" However, this reckless attack causes you to take a hit as well. Your health drops to {}. ".format(health))
+                time_text("\nSuddenly, the ogre lunges forward and grabs you")
+                health_check()
+            if fight_4 == "sneak":
+                health -= int(random.randint(20,27))
+                time_text(" \nYou quietly sneak behind the ogre to try and hit it.")
+                time_text("Suddenly, it grabs you, almost as if it knew you would try to sneak past it")
+          
+            time_text("\nThe ogre reaches into your pocket, takes the red gem and crushes it")
+            time_text("You wonder how it knew you had that.")
+            health -= int(random.randint(20,29))
+            time_text("\nYou are thrown across the room. Your health drops to {}.".format(health))
+            time_text("The dusty book falls out of your bag and you realize the text is glowing!")
+            while True:
+                choice_14 = input("\nDo you want to use it? ('yes'/'no') ") # Red gem allows you to choose between two ending options
+                if choice_14 == "yes" or choice_14 == "no":
+                    break
+                else:
+                    time_text("Invalid choice")
+            
+            if choice_14 == "yes":
+                time_text("\nYou use the book to cast the special spell and seal the creature underground!")
+                time_text("\nBefore you can try to find the next room, an old wizard you feel like you've seen before appears in front of you.")
+                time_text("He thanks you for defeating the ogre and asks if you would like to leave? ")
+                while True:
+                    choice_15 = input("\n('yes'): ") # This choice decides the ending you will get
+                    if choice_15 == "yes" or choice_15 == "Tony!":
+                        break
+                    else:
+                        time_text("Invalid choice")
+                
+                if choice_15 == "yes":
+                    time_text("\nThe wizard opens a secret staircase and in the back of the room and you escape!")
+                    time_text("\nEND")
+                    sys.exit()
+                
+                if choice_15 == "Tony!":
+                    time_text("\n'I knew it was you!'")
+                    time_text("The wizard explains that thousands of years ago you the original king trapped the ogre in the underground prison")
+                    time_text("However, when the goblins overthrew the king, the seal upon the ogre became weak and you were the one to fully unseal him!")
+                    time_text("\nToday, you were the one to once again seal the monster!")
+                    time_text("\nThe wizard thanks you again and opens the exit, you escaped!")
+                    time_text("\nEND")
+                    sys.exit()
+            
+            if choice_14 == "no":
+                time_text("\nYou decide to fight this enemy without help")
+                time_text("Thanks to your determination you take out the ogre!")
+                time_text("\nYou use the magic book to open an exit and you escape!")
+                time_text("\nEND")
+                sys.exit()      
+
+        # Lines 382 - 457, underground prison 
+        elif choice_4b == "right":
+            time_text("\nYou choose the right path, intrigued by its mystery.")
+            time_text("You decide to continue, soon enough you are engulfed in darkness. You look behind you, pitch black; there is no turning back now.")
+            health -= int(random.randint(28, 32))
+            time_text(" \nSuddenly, you feel the ground underneath you give away. You fall for a while, still unable to see anything.")
+            time_text(" When you hit the ground again, you take significant damage, your health drops to {}".format(health))
+            health_check()
+            time_text(" \nYou look around, you are in a dark room lit with a dim purple light. There are thick chains nailed to the walls; it almost seems like a prison of some sort.")
+            time_text(" An old man walks out of the shadows. He holds a stone staff with a green fire at the tip.")
+
+        while True:    
+            choice_5b = input('"\nYou are not supposed to be down here... If you stay you will suffer a fate worse than death! Let me take your life, it will be a peaceful end, much better than what will happen if you stay." ("accept"/"deny") ')
+            if choice_5b == "accept" or choice_5b == "deny":
+                break
+            else:
+                time_text("invalid choice")
+        if choice_5b == "accept":
+            time_text("\nYou choose the grim fate of death. You can't imagine anything worse than death but something about this old man makes you believe him." )
+            time_text(" Your life slowly fades away as he puts his staff to your chest but, strangely enough, you feel at peace, as if you've dodged a bullet.")
+            time_text("\nEND")
+            sys.exit()
+        if choice_5b == "deny":
+            time_text(" \nYou deny his crazy proposition, there can't possibly be a fate worse than death right? The man stares at you with a saddened look before leaving into the darkness once again.")
+            time_text("\nIf we meet again, just say the word: 'Tony!'")
+            time_text(" You continue forward, it only gets darker and darker until you finally end up in a large cavern.")
+            health -= int(random.randint(8,14))
+            time_text("Suddenly, you are slammed to the ground. Your health drops to {}. You see the creature , it is a huge ogre with hundreds of wicked twisting horns coming from its body.".format(health))
+            health_check()
+ 
+            while True:    
+                fight_2c = input("\nYou jump to your feet, the creature is awaiting your next move. You notice the creature has horns where it's eyes should be. Do you run head on or do you sneak behind it? ('run'/'sneak') ")
+                if fight_2c == "run" or fight_2c == "sneak":
+                    break
+                else:
+                    time_text("invalid choice")
+            if fight_2c == "run":
+                health -= int(random.randint(20,23))
+                time_text(" \nYou charge forward swinging your sword wildly. You deal significant damage!")
+                time_text(" However, this reckless attack causes you to take a hit as well. Your health drops to {}. ".format(health))
+                health_check()
+            if fight_2c == "sneak":
+                time_text(" You quietly sneak behind the ogre and attack when it is not expecting it.")
+            time_text(" \nBefore you can continue fighting, you realize the red gem you kept in your pocket has begun to glow!")
+            while True:
+                choice_10 = input("\nDo you want to use it? ('yes'/'no') ") # Red gem allows you to choose between two ending options
+                if choice_10 == "yes" or choice_10 == "no":
+                    break
+                else:
+                    time_text("Invalid choice")
+            
+            if choice_10 == "no":
+                while True:    
+                    fight_2b = input("You notice its legs are not completely covered in horns, this may be a weak spot! Do you go all in on the legs or play it safe? ('legs'/'safe') ")
+                    if fight_2b == "legs" or fight_2b == "safe":
+                        break
+                    else:
+                        time_text("invalid choice") 
+                if fight_2b == "legs":
+                    health -= int(random.randint(22,27))
+                    time_text(" \nYou charge once again swinging with all your might at its legs. It attacks in retaliation, your health now sits at {}. ".format(health))
+                    health_check()
+                    time_text(" It is too late though, you deal too much damage and the ogre topples. You raise your sword for one final hit and finish it with one swift strike! ")
+                if fight_2b == "safe":
+                    time_text(" \nYou go for the safe option and get a couple quick swings at the ogre while sneaking around it. Somehow it works and the ogre topples to the ground!")
+                time_text(" \nAs the battle concludes, you feel as if something isn't right, was it really that easy? Was the old man lying? Nothing seems to make sense here.")
+                time_text(" This is when the ogre's body starts to fade away, you hear a voice. 'You've freed me from this prison, now you will take my place in this wretched hole and rot for eternity.'")
+                time_text(" You realize this is what the old man had meant, no matter how hard you tried there were no exits anywhere, you are truly stuck in this prison forever.")
+                time_text("\nEND")
+                sys.exit()
+            
+            if choice_10 == "yes":
+                time_text(" \nYou pull it out and the gem only continues to increase in intensity. You are not sure what is happening but the walls of the dungeon around you begin to crumble. ")
+                time_text(" When the bright stone finally stops glowing, you look around you, you are in the same woods you walked past this morning!")
+                time_text(" The ogre doesn't seem to care about anymore as it runs further into the trees. You dont know what you've unleashed upon the world but you are glad you are done with that mess.")
+                time_text("\nEND")
+                sys.exit()
